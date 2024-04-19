@@ -1,0 +1,22 @@
+- Read all [1:] lines from aerosol_data_links.txt
+- For each file, instead of emissions per day, we want emissions per month. 
+    - We will sum up the all emissions over the entire rectangular perimeter about the United States
+    - We will append that value to a list. This list will contain the 
+
+
+
+- Using the dates of each file, for each year, we will find:
+Dates for Q1: January 1 – March 31
+Dates for Q2: April 1 – June 3
+Dates for Q3: July 1 – September 30
+Dates for Q4: October 1 – December 31
+
+###### TO DO #######
+- Download all of the files using their actual file names, or a filename called BCEMAN_198001 ... 198001 are the 6 digits proceeding 'nx.'
+- For each year:
+-   We'll sum all information for Q1, Q2, Q3, Q4
+-   Append information for Q1, Q2, Q3, Q4 to a "time-series" list. 
+-   Have a new list. This will be 1980, 1980, 1980, 1980, 1981, 1981, 1981, 1981, ... to show what year each quarter is from. 
+
+Note:
+- For each file, find the sum of all BCEMAN in the area. This will be the BCEMAN for that month. 
