@@ -35,9 +35,10 @@ session = SessionWithHeaderRedirection(username, password)
 # Loop through Files
 # ***********************
 
+data_name = 'OCEMAN'
 
 # Find urls for data files and put them in a list
-with open('aerosol_data_links.txt', 'r') as file:
+with open(f'links/{data_name}_links.txt', 'r') as file:
     url_list = []
     line_number = 0
     for line in file:
@@ -53,11 +54,11 @@ for url in url_list:
     match = re.findall(match_pattern, url)
     print((match[0]))
 
-    folder_name = 'BCEMAN_files'
+    folder_name = f'{data_name}_files'
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
-    filename = f'BCEMAN_files/BCEMAN_{str(match[0])}.txt'
+    filename = f'{folder_name}/{data_name}_{str(match[0])}.txt'
     print(filename)
 
     try:
