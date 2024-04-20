@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # data_names = ['BCEMAN', 'OCEMAN', 'SO2EMAN', 'SO4EMAN']
-data_names = ['BCEMAN', 'OCEMAN']
+data_names = ['BCEMAN', 'OCEMAN', 'SO2EMAN', 'SO4EMAN']
 for data_name in data_names:
     # Define the folder containing your files
     folder_path = f'{data_name}_files/'
@@ -36,7 +36,7 @@ for data_name in data_names:
     df = pd.DataFrame({
         'Year': years,
         'Month': months,
-        'Monthly Sum': monthly_sums
+        f'{data_name} Monthly Sum': monthly_sums
     })
 
     # Sort the DataFrame based on year and month

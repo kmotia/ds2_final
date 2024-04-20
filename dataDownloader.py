@@ -35,7 +35,7 @@ session = SessionWithHeaderRedirection(username, password)
 # Loop through Files
 # ***********************
 
-data_name = 'OCEMAN'
+data_name = 'SO4EMAN'
 
 # Find urls for data files and put them in a list
 with open(f'links/{data_name}_links.txt', 'r') as file:
