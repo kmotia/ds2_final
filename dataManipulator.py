@@ -46,5 +46,5 @@ for data_name in data_names:
     df.reset_index(drop=True, inplace=True)
 
     # Saving the DataFrame to a CSV file
-    csv_file_path = f'{data_name}_summary.csv'
+    csv_file_path = f'{data_name}_ts.csv'
     df.to_csv(csv_file_path, index=False)
