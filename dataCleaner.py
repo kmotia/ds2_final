@@ -60,3 +60,8 @@ OCE_df = aggregate_months(OCE_df)
 SO2E_df = aggregate_months(SO2E_df)
 SO4E_df = aggregate_months(SO4E_df)
 
+profit_df = pd.read_csv('raw_profit_ts.csv')
+profit_df['Profit'] = profit_df['A053RC1Q027SBEA']
+profit_df = profit_df.drop(columns=['A053RC1Q027SBEA'])
+print(profit_df)
+
