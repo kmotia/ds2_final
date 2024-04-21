@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 # Load each CSV file into a DataFrame
 BCEMAN_df = pd.read_csv('BCEMAN_ts.csv')
@@ -13,9 +15,27 @@ print(merged_df)
 # Save the merged DataFrame to a new CSV file
 merged_df.to_csv('all_ts.csv', index=False)
 
-# Plot each pollutant as a function of time at a monthly resolution
+# ----------------- Plot each pollutant as a function of time at a monthly resolution ----------------- 
+# Create a time index by combining 'Year', 'Month', and a placeholder 'day' component
+merged_df['Date'] = pd.to_datetime(merged_df[['Year', 'Month']].assign(day=1))
 
-# Plot each pollutant as a function of time at a quarterly resolution
+# Plot each pollutant as a function of time
+plt.figure(figsize=(10, 6))
+
+plt.plot(merged_df['Date'], merged_df['BCEMAN Monthly Sum'], label='BCEMAN')
+plt.plot(merged_df['Date'], merged_df['OCEMAN Monthly Sum'], label='OCEMAN')
+plt.plot(merged_df['Date'], merged_df['SO2EMAN Monthly Sum'], label='SO2EMAN')
+plt.plot(merged_df['Date'], merged_df['SO4EMAN Monthly Sum'], label='SO4EMAN')
+
+plt.xlabel('Time')
+plt.ylabel('Pollutant Flux Density ($kg \cdot m^{-2} \cdot s^{-1}$)')
+plt.title('Pollutant Monthly Sum Over Time')
+plt.legend()
+plt.grid(True)
+
+plt.show()
+
+# ----------------- Plot each pollutant as a function of time at a quarterly resolution ----------------- 
 
 # Download the profit data and plot it 
 
