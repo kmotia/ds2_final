@@ -1,5 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.dates as mdates
+
 
 # Read in raw year-month CSVs
 BCE_df = pd.read_csv('BCEMAN_ts.csv')
@@ -53,8 +56,10 @@ def aggregate_months(df):
     # Reorder columns
     df = df[['Date', 'Monthly Sum']]
 
-    df['Quarterly Emissions'] = df['Monthly Sum']
-    df = df.drop(columns=['Monthly Sum'])
+    df.rename(columns={'Monthly Sum': 'Quarterly Emissions'}, inplace=True)
+
+    # df['Quarterly Emissions'] = df['Monthly Sum']
+    # df = df.drop(columns=['Monthly Sum'])
 
     return df
 
@@ -71,8 +76,11 @@ SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
 SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
 
 profit_df = pd.read_csv('raw_profit_ts.csv')
-profit_df['Profit'] = profit_df['A053RC1Q027SBEA']
-profit_df = profit_df.drop(columns=['A053RC1Q027SBEA'])
+# profit_df['Profit'] = profit_df['A053RC1Q027SBEA']
+# profit_df = profit_df.drop(columns=['A053RC1Q027SBEA'])
+profit_df.rename(columns={'DATE': 'Date'}, inplace=True)
+profit_df.rename(columns={'A053RC1Q027SBEA': 'Profit'}, inplace=True)
+
 print(profit_df)
 
 #-------- Plot Quarterly Data
@@ -92,3 +100,25 @@ plt.legend()
 plt.grid(True)
 
 plt.show()
+
+#------- Plot Profit Data
+profit_df['Date'] = pd.to_datetime(profit_df['Date'])   # We've already done this for Pollutant Data.
+
+# Plot each pollutant as a function of time
+plt.figure(figsize=(10, 6))
+
+plt.plot(profit_df['Date'], profit_df['Profit'], label='National Profit')
+
+plt.xlabel('Time')
+plt.ylabel('Billions of Dollars')
+plt.title('Quarterly Profit Over Time')
+plt.legend()
+plt.grid(True)
+
+# Set locator and formatter for the x-axis ticks
+plt.gca().xaxis.set_major_locator(mdates.YearLocator(base=5))
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+
+plt.show()
+
+print(profit_df)
