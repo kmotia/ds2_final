@@ -5,7 +5,6 @@ BCE_df = pd.read_csv('BCEMAN_ts.csv')
 OCE_df = pd.read_csv('OCEMAN_ts.csv')
 SO2E_df = pd.read_csv('SO2EMAN_ts.csv')
 SO4E_df = pd.read_csv('SO4EMAN_ts.csv')
-pollutants_df_list = [BCE_df, OCE_df, SO2E_df, SO4E_df]
 
 raw_profit_df = pd.read_csv('raw_profit_ts.csv')
 
@@ -28,5 +27,39 @@ SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
 SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
 
 
+# # Load the cleaned CSV files for each pollutant
+# BCE_df = pd.read_csv('clean_BCEMAN_ts.csv')
+# OCE_df = pd.read_csv('clean_OCEMAN_ts.csv')
+# SO2E_df = pd.read_csv('clean_SO2EMAN_ts.csv')
+# SO4E_df = pd.read_csv('clean_SO4EMAN_ts.csv')
 
 
+print(SO2E_df)
+
+def aggregate_months(df):
+    # Group by year and calculate the sum for every 3 consecutive months
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+    df['Group'] = (df['Month'] - 1) // 3  # Identify the group for each month
+    
+    # Group by year and group number, then calculate the sum
+    df = df.groupby(['Year', 'Group'], as_index=False)['Monthly Sum'].sum()
+    
+    # Convert group number back to month
+    df['Month'] = df['Group'] * 3 + 1
+    
+    # Combine year and month to create the Date column
+    df['Date'] = pd.to_datetime(df['Year'].astype(str) + '-' + df['Month'].astype(str) + '-01')
+    
+    # Reorder columns
+    df = df[['Date', 'Monthly Sum']]
+
+    return df
+
+
+BCE_df = aggregate_months(BCE_df)
+OCE_df = aggregate_months(OCE_df)
+SO2E_df = aggregate_months(SO2E_df)
+SO4E_df = aggregate_months(SO4E_df)
+
+print(SO2E_df)

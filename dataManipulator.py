@@ -36,7 +36,7 @@ for data_name in data_names:
     df = pd.DataFrame({
         'Year': years,
         'Month': months,
-        f'{data_name} Monthly Sum': monthly_sums
+        f'Monthly Sum': monthly_sums
     })
 
     # Sort the DataFrame based on year and month
