@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Read in raw year-month CSVs
 BCE_df = pd.read_csv('BCEMAN_ts.csv')
@@ -19,11 +20,11 @@ OCE_df = get_pollutants_dates(OCE_df)
 SO2E_df = get_pollutants_dates(SO2E_df)
 SO4E_df = get_pollutants_dates(SO4E_df)
 
-# Output CSVs with dates
-BCE_df.to_csv('clean_BCEMAN_ts.csv', index=False)
-OCE_df.to_csv('clean_OCEMAN_ts.csv', index=False)
-SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
-SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
+# # Output CSVs with dates
+# BCE_df.to_csv('clean_BCEMAN_ts.csv', index=False)
+# OCE_df.to_csv('clean_OCEMAN_ts.csv', index=False)
+# SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
+# SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
 
 
 # # Load the cleaned CSV files for each pollutant
@@ -52,6 +53,9 @@ def aggregate_months(df):
     # Reorder columns
     df = df[['Date', 'Monthly Sum']]
 
+    df['Quarterly Emissions'] = df['Monthly Sum']
+    df = df.drop(columns=['Monthly Sum'])
+
     return df
 
 # Aggregate monthly data to quarterly data
@@ -60,8 +64,31 @@ OCE_df = aggregate_months(OCE_df)
 SO2E_df = aggregate_months(SO2E_df)
 SO4E_df = aggregate_months(SO4E_df)
 
+# Output CSVs with dates and quarterly emissions
+BCE_df.to_csv('clean_BCEMAN_ts.csv', index=False)
+OCE_df.to_csv('clean_OCEMAN_ts.csv', index=False)
+SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
+SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
+
 profit_df = pd.read_csv('raw_profit_ts.csv')
 profit_df['Profit'] = profit_df['A053RC1Q027SBEA']
 profit_df = profit_df.drop(columns=['A053RC1Q027SBEA'])
 print(profit_df)
 
+#-------- Plot Quarterly Data
+
+# Plot each pollutant as a function of time
+plt.figure(figsize=(10, 6))
+
+plt.plot(BCE_df['Date'], BCE_df['Quarterly Emissions'], label='BCEMAN')
+plt.plot(OCE_df['Date'], OCE_df['Quarterly Emissions'], label='OCEMAN')
+plt.plot(SO2E_df['Date'], SO2E_df['Quarterly Emissions'], label='SO2EMAN')
+plt.plot(SO4E_df['Date'], SO4E_df['Quarterly Emissions'], label='SO4EMAN')
+
+plt.xlabel('Time')
+plt.ylabel('Pollutant Flux Density ($kg \cdot m^{-2} \cdot s^{-1}$)')
+plt.title('Pollutant Monthly Sum Over Time')
+plt.legend()
+plt.grid(True)
+
+plt.show()
