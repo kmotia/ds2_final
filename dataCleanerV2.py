@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
 from statsmodels.tsa.stattools import grangercausalitytests
+import cpi
 
+#################### Preprocess emissions data ####################
 
 # Read in raw year-month CSVs
 BCE_df = pd.read_csv('BCEMAN_ts.csv')
@@ -23,8 +25,6 @@ BCE_df = get_pollutants_dates(BCE_df)
 OCE_df = get_pollutants_dates(OCE_df)
 SO2E_df = get_pollutants_dates(SO2E_df)
 SO4E_df = get_pollutants_dates(SO4E_df)
-
-
 
 # Function to aggregate monthly data to quarterly data
 def aggregate_months(df):
@@ -51,15 +51,15 @@ OCE_df.to_csv('clean_OCEMAN_ts.csv', index=False)
 SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
 SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
 
-#-------- Plot Emissions Data#--------#--------#--------#--------#--------#--------#--------#--------#--------
+#################### Plot emissions data ####################
 
 # Plot each pollutant as a function of time
 plt.figure(figsize=(10, 6))
 
-plt.plot(BCE_df['Date'], BCE_df['Emissions'], label='BCEMAN')
-plt.plot(OCE_df['Date'], OCE_df['Emissions'], label='OCEMAN')
+# plt.plot(BCE_df['Date'], BCE_df['Emissions'], label='BCEMAN')
+# plt.plot(OCE_df['Date'], OCE_df['Emissions'], label='OCEMAN')
 plt.plot(SO2E_df['Date'], SO2E_df['Emissions'], label='SO2EMAN')
-plt.plot(SO4E_df['Date'], SO4E_df['Emissions'], label='SO4EMAN')
+# plt.plot(SO4E_df['Date'], SO4E_df['Emissions'], label='SO4EMAN')
 
 plt.xlabel('Time')
 plt.ylabel('Pollutant Flux Density ($kg \cdot m^{-2} \cdot s^{-1}$)')
@@ -70,15 +70,40 @@ plt.grid(True)
 plt.show()
 
 
+#################### Preprocess FRED data ####################
+def adjust_for_inflation(df):
+    # Ensure 'Date' column is set as datetime
+    df['Date'] = pd.to_datetime(df['Date'])
 
-# #--------Preprocess FRED Profit data#--------#--------#--------#--------#--------#--------#--------#--------
+    # Determine the name of the second column
+    second_column = df.columns[1]
+
+    # Adjust values in the second column for inflation
+    for i, row in df.iterrows():
+        year = row['Date'].year
+        adjusted_value = cpi.inflate(row[second_column], year)      # Adjusts for inflation using a benchmark year --> (Most recent completed year for this project is 2023)
+        df.at[i, second_column] = adjusted_value
+    return df
+
 profit_df = pd.read_csv('raw_profit_ts.csv')
 profit_df.rename(columns={'DATE': 'Date'}, inplace=True)
 profit_df.rename(columns={'A053RC1Q027SBEA': 'Profit'}, inplace=True)
-profit_df['Date'] = pd.to_datetime(profit_df['Date'])   # We've already done this for Pollutant Data.
-print(profit_df)
+# profit_df['Date'] = pd.to_datetime(profit_df['Date'])                     # Convert to datetime format
+profit_df = adjust_for_inflation(profit_df)
 
-#------- Plot Profit Data--------#--------#--------#--------#--------#--------#--------#--------#--------
+
+
+# Repeat for every FRED CSV file
+
+
+
+
+
+
+
+
+
+#################### Plot FRED data ####################
 # Plot each pollutant as a function of time
 plt.figure(figsize=(10, 6))
 
@@ -96,37 +121,4 @@ plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
 
 plt.show()
 
-print(profit_df)
 
-
-#--------------------Correlation analysis between corporate profit data and SO2 emissions--------------------
-
-# Assuming you have already loaded and preprocessed your data into pandas DataFrames
-# Assuming profits_data and so2_data are pandas DataFrames with Date as the index
-
-# Merge the profit and SO2 data on their common index (Date)
-merged_data = pd.merge(profit_df, SO2E_df, how='inner', left_index=True, right_index=True)
-
-# Calculate the correlation coefficient between detrended corporate profit data and detrended SO2 emissions
-correlation_coefficient = merged_data['Profit'].corr(merged_data['Emissions'])
-
-print("Correlation Coefficient:", correlation_coefficient) #.................. Correlation Coefficient: -0.8515189408474223
-
-#---------------#---------------#---------------#---------------#---------------#---------------#---------------
-
-# 1. Correlation Analysis
-correlation = SO2E_df['Emissions'].corr(profit_df['Profit'])
-print("Correlation between SO2 Emissions and Corporate Profit:", correlation)
-
-# Visualize correlation
-plt.figure(figsize=(8, 6))
-plt.scatter(SO2E_df['Emissions'], profit_df['Profit'])
-plt.xlabel('Pollutant Flux Density ($kg \cdot m^{-2} \cdot s^{-1}$)')
-plt.ylabel('Corporate Profit (Billions of Dollars)')
-plt.title(f'Correlation between SO2 Emissions and Corporate Profit (Correlation Coeff={correlation:.2f})')
-plt.legend()
-plt.show()
-
-#---------------#---------------#---------------#---------------#---------------#---------------#---------------
-
-# ----
