@@ -37,6 +37,7 @@ def aggregate_months(df):
     df['Date'] = pd.to_datetime(df['Year'].astype(str) + '-' + df['Month'].astype(str) + '-01') # Combine year and month to create the Date column
     df = df[['Date', 'Monthly Sum']]                                                            # Reorder columns 
     df.rename(columns={'Monthly Sum': 'Emissions'}, inplace=True)
+    df.set_index('Date', inplace=True)                                                          # Set Date as index
     return df
 
 # Aggregate monthly data to quarterly data
@@ -46,10 +47,17 @@ SO2E_df = aggregate_months(SO2E_df)
 SO4E_df = aggregate_months(SO4E_df)
 
 # Output CSVs with dates and quarterly emissions
-BCE_df.to_csv('clean_BCEMAN_ts.csv', index=False)
-OCE_df.to_csv('clean_OCEMAN_ts.csv', index=False)
-SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=False)
-SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=False)
+BCE_df.to_csv('clean_BCEMAN_ts.csv', index=True)
+OCE_df.to_csv('clean_OCEMAN_ts.csv', index=True)
+SO2E_df.to_csv('clean_SO2EMAN_ts.csv', index=True)
+SO4E_df.to_csv('clean_SO4EMAN_ts.csv', index=True)
+
+# Explicitly output SO2 as the target csv file
+targets_df = SO2E_df.copy()
+target_names = ['SO2']
+targets_df.columns = target_names
+targets_df.to_csv('targets.csv', index=True)                       # just to explicitly state which one is the predictor
+
 
 #################### Plot emissions data ####################
 
@@ -58,7 +66,7 @@ plt.figure(figsize=(10, 6))
 
 # plt.plot(BCE_df['Date'], BCE_df['Emissions'], label='BCEMAN')
 # plt.plot(OCE_df['Date'], OCE_df['Emissions'], label='OCEMAN')
-plt.plot(SO2E_df['Date'], SO2E_df['Emissions'], label='SO2EMAN')
+plt.plot(SO2E_df.index, SO2E_df['Emissions'], label='SO2EMAN')
 # plt.plot(SO4E_df['Date'], SO4E_df['Emissions'], label='SO4EMAN')
 
 plt.xlabel('Time')
@@ -187,8 +195,8 @@ workingPop_df.set_index('Date', inplace=True)
 # predictors_df = pd.concat([autoGas_df, basicChem_df, fuelOil_df, manufacturing_df, paveRoofPC_df, PC_df, totalPop_df, profit_df, volatileEnergy_df, workingPop_df], axis=1)
 
 predictors_df = pd.concat([autoGas_df, basicChem_df, fuelOil_df, manufacturing_df, paveRoofPC_df, PC_df, totalPop_df, profit_df, workingPop_df], axis=1)
-new_column_names = ['Auto Gas', 'Basic Chemicals', 'Fuel Oil', 'Manufacturing', 'Pave Roof PC', 'Petrol Coal', 'Total Population', 'Profit', 'Working Population']
-predictors_df.columns = new_column_names
+predictor_names = ['Auto Gas', 'Basic Chemicals', 'Fuel Oil', 'Manufacturing', 'Pave Roof PC', 'Petrol Coal', 'Total Population', 'Profit', 'Working Population']
+predictors_df.columns = predictor_names
 predictors_df.to_csv('predictors.csv', index=True)
 
 print(predictors_df)
