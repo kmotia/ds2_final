@@ -154,12 +154,12 @@ PC_df['Date'] = pd.to_datetime(PC_df['Date'])
 PC_df.set_index('Date', inplace=True)
 PC_df = adjust_index_base_year(PC_df)                            # adjust index base year to 2023 = 100
 
-total_pop = pd.read_csv('raw_predictor_files/total_pop.csv')
-total_pop.columns.values[0] = 'Date'
-total_pop.columns.values[1] = 'IP Index'
-total_pop['Date'] = pd.to_datetime(total_pop['Date'])
-total_pop.set_index('Date', inplace=True)
-total_pop = adjust_index_base_year(total_pop)                    # adjust index base year to 2023 = 100
+totalPop_df = pd.read_csv('raw_predictor_files/total_pop.csv')
+totalPop_df.columns.values[0] = 'Date'
+totalPop_df.columns.values[1] = 'IP Index'
+totalPop_df['Date'] = pd.to_datetime(totalPop_df['Date'])
+totalPop_df.set_index('Date', inplace=True)
+totalPop_df = adjust_index_base_year(totalPop_df)                    # adjust index base year to 2023 = 100
 
 profit_df = pd.read_csv('raw_predictor_files/profit_corporate.csv')
 profit_df.columns.values[0] = 'Date'
@@ -168,12 +168,12 @@ profit_df['Date'] = pd.to_datetime(profit_df['Date'])
 profit_df.set_index('Date', inplace=True)
 profit_df = adjust_for_inflation(profit_df)                         # adjust for inflation
 
-volatileEnergy_df = pd.read_csv('raw_predictor_files/volatility_energyEnv.csv')
-volatileEnergy_df.columns.values[0] = 'Date'
-volatileEnergy_df.columns.values[1] = 'Volatility Index'
-volatileEnergy_df['Date'] = pd.to_datetime(volatileEnergy_df['Date'])
-volatileEnergy_df.set_index('Date', inplace=True)
-volatileEnergy_df = adjust_for_inflation(volatileEnergy_df)         # adjust for inflation
+# volatileEnergy_df = pd.read_csv('raw_predictor_files/volatility_energyEnv.csv')       This data is  monthly and starts in 1985. We'll have to account for this if we want to include it. 
+# volatileEnergy_df.columns.values[0] = 'Date'
+# volatileEnergy_df.columns.values[1] = 'Volatility Index'
+# volatileEnergy_df['Date'] = pd.to_datetime(volatileEnergy_df['Date'])
+# volatileEnergy_df.set_index('Date', inplace=True)
+# print(volatileEnergy_df)
 
 workingPop_df = pd.read_csv('raw_predictor_files/working_pop.csv')
 workingPop_df.columns.values[0] = 'Date'
@@ -183,9 +183,15 @@ workingPop_df.set_index('Date', inplace=True)
                                                                     # No adjustments necessary. Units are "number of people"
 
 
+# Merge the predictor dataframes and output it as a CSV
+# predictors_df = pd.concat([autoGas_df, basicChem_df, fuelOil_df, manufacturing_df, paveRoofPC_df, PC_df, totalPop_df, profit_df, volatileEnergy_df, workingPop_df], axis=1)
 
+predictors_df = pd.concat([autoGas_df, basicChem_df, fuelOil_df, manufacturing_df, paveRoofPC_df, PC_df, totalPop_df, profit_df, workingPop_df], axis=1)
+new_column_names = ['Auto Gas', 'Basic Chemicals', 'Fuel Oil', 'Manufacturing', 'Pave Roof PC', 'Petrol Coal', 'Total Population', 'Profit', 'Working Population']
+predictors_df.columns = new_column_names
+predictors_df.to_csv('predictors.csv', index=True)
 
-
+print(predictors_df)
 
 
 
