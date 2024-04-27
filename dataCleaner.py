@@ -64,10 +64,10 @@ targets_df.to_csv('targets.csv', index=True)                       # just to exp
 # Plot each pollutant as a function of time
 plt.figure(figsize=(10, 6))
 
-# plt.plot(BCE_df['Date'], BCE_df['Emissions'], label='BCEMAN')
-# plt.plot(OCE_df['Date'], OCE_df['Emissions'], label='OCEMAN')
-plt.plot(SO2E_df.index, SO2E_df['Emissions'], label='SO2EMAN')
-# plt.plot(SO4E_df['Date'], SO4E_df['Emissions'], label='SO4EMAN')
+plt.plot(BCE_df.index, BCE_df['Emissions'], label='BCEMAN')
+plt.plot(OCE_df.index, OCE_df['Emissions'], label='OCEMAN')
+# plt.plot(SO2E_df.index, SO2E_df['Emissions'], label='SO2EMAN')
+# plt.plot(SO4E_df.index, SO4E_df['Emissions'], label='SO4EMAN')
 
 plt.xlabel('Time')
 plt.ylabel('Pollutant Flux Density ($kg \cdot m^{-2} \cdot s^{-1}$)')
