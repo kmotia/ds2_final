@@ -64,9 +64,9 @@ targets_df.to_csv('targets.csv', index=True)                       # just to exp
 # Plot each pollutant as a function of time
 plt.figure(figsize=(10, 6))
 
-plt.plot(BCE_df.index, BCE_df['Emissions'], label='BCEMAN')
-plt.plot(OCE_df.index, OCE_df['Emissions'], label='OCEMAN')
-# plt.plot(SO2E_df.index, SO2E_df['Emissions'], label='SO2EMAN')
+# plt.plot(BCE_df.index, BCE_df['Emissions'], label='BCEMAN')
+# plt.plot(OCE_df.index, OCE_df['Emissions'], label='OCEMAN')
+plt.plot(SO2E_df.index, SO2E_df['Emissions'], label='SO2EMAN')
 # plt.plot(SO4E_df.index, SO4E_df['Emissions'], label='SO4EMAN')
 
 plt.xlabel('Time')
@@ -169,7 +169,7 @@ totalPop_df['Date'] = pd.to_datetime(totalPop_df['Date'])
 totalPop_df.set_index('Date', inplace=True)
 totalPop_df = adjust_index_base_year(totalPop_df)                    # adjust index base year to 2023 = 100
 
-profit_df = pd.read_csv('raw_predictor_files/profit_corporate.csv')
+profit_df = pd.read_csv('raw_predictor_files/profit_corp.csv')
 profit_df.columns.values[0] = 'Date'
 profit_df.columns.values[1] = 'Profit'
 profit_df['Date'] = pd.to_datetime(profit_df['Date'])
