@@ -111,11 +111,6 @@ def adjust_index_base_year(df):
 
     return df
 
-# Example usage:
-# Assuming df is your pandas DataFrame and initial_num is the initial number
-# adjusted_df = adjust_index_base_year(df, initial_num)
-
-
 
 
 # Rename columns. Adjust index or adjust for inflation for appropriate features
