@@ -122,19 +122,19 @@ autoGas_df['Date'] = pd.to_datetime(autoGas_df['Date'])
 autoGas_df.set_index('Date', inplace=True)
 autoGas_df = adjust_index_base_year(autoGas_df)                 # adjust index base year to 2023 = 100
 
-basicChem_df = pd.read_csv('raw_predictor_files/IP_basicChem.csv')
-basicChem_df.columns.values[0] = 'Date'
-basicChem_df.columns.values[1] = 'IP Index'
-basicChem_df['Date'] = pd.to_datetime(basicChem_df['Date'])
-basicChem_df.set_index('Date', inplace=True)
-basicChem_df = adjust_index_base_year(basicChem_df)              # adjust index base year to 2023 = 100
+# basicChem_df = pd.read_csv('raw_predictor_files/IP_basicChem.csv')
+# basicChem_df.columns.values[0] = 'Date'
+# basicChem_df.columns.values[1] = 'IP Index'
+# basicChem_df['Date'] = pd.to_datetime(basicChem_df['Date'])
+# basicChem_df.set_index('Date', inplace=True)
+# basicChem_df = adjust_index_base_year(basicChem_df)              # adjust index base year to 2023 = 100
 
-fuelOil_df = pd.read_csv('raw_predictor_files/IP_fuelOil.csv')
-fuelOil_df.columns.values[0] = 'Date'
-fuelOil_df.columns.values[1] = 'IP Index'
-fuelOil_df['Date'] = pd.to_datetime(fuelOil_df['Date'])
-fuelOil_df.set_index('Date', inplace=True)
-fuelOil_df = adjust_index_base_year(fuelOil_df)                  # adjust index base year to 2023 = 100
+# fuelOil_df = pd.read_csv('raw_predictor_files/IP_fuelOil.csv')
+# fuelOil_df.columns.values[0] = 'Date'
+# fuelOil_df.columns.values[1] = 'IP Index'
+# fuelOil_df['Date'] = pd.to_datetime(fuelOil_df['Date'])
+# fuelOil_df.set_index('Date', inplace=True)
+# fuelOil_df = adjust_index_base_year(fuelOil_df)                  # adjust index base year to 2023 = 100
 
 manufacturing_df = pd.read_csv('raw_predictor_files/IP_manufacturing.csv')
 manufacturing_df.columns.values[0] = 'Date'
@@ -143,12 +143,12 @@ manufacturing_df['Date'] = pd.to_datetime(manufacturing_df['Date'])
 manufacturing_df.set_index('Date', inplace=True)
 manufacturing_df = adjust_index_base_year(manufacturing_df)      # adjust index base year to 2023 = 100
 
-paveRoofPC_df = pd.read_csv('raw_predictor_files/IP_paveRoofPetrol.csv')
-paveRoofPC_df.columns.values[0] = 'Date'
-paveRoofPC_df.columns.values[1] = 'IP Index'
-paveRoofPC_df['Date'] = pd.to_datetime(paveRoofPC_df['Date'])
-paveRoofPC_df.set_index('Date', inplace=True)
-paveRoofPC_df = adjust_index_base_year(paveRoofPC_df)            # adjust index base year to 2023 = 100
+# paveRoofPC_df = pd.read_csv('raw_predictor_files/IP_paveRoofPetrol.csv')
+# paveRoofPC_df.columns.values[0] = 'Date'
+# paveRoofPC_df.columns.values[1] = 'IP Index'
+# paveRoofPC_df['Date'] = pd.to_datetime(paveRoofPC_df['Date'])
+# paveRoofPC_df.set_index('Date', inplace=True)
+# paveRoofPC_df = adjust_index_base_year(paveRoofPC_df)            # adjust index base year to 2023 = 100
 
 PC_df = pd.read_csv('raw_predictor_files/IP_petrolCoal.csv')
 PC_df.columns.values[0] = 'Date'
@@ -157,12 +157,12 @@ PC_df['Date'] = pd.to_datetime(PC_df['Date'])
 PC_df.set_index('Date', inplace=True)
 PC_df = adjust_index_base_year(PC_df)                            # adjust index base year to 2023 = 100
 
-totalPop_df = pd.read_csv('raw_predictor_files/total_pop.csv')
-totalPop_df.columns.values[0] = 'Date'
-totalPop_df.columns.values[1] = 'IP Index'
-totalPop_df['Date'] = pd.to_datetime(totalPop_df['Date'])
-totalPop_df.set_index('Date', inplace=True)
-totalPop_df = adjust_index_base_year(totalPop_df)                    # adjust index base year to 2023 = 100
+# totalPop_df = pd.read_csv('raw_predictor_files/total_pop.csv')
+# totalPop_df.columns.values[0] = 'Date'
+# totalPop_df.columns.values[1] = 'IP Index'
+# totalPop_df['Date'] = pd.to_datetime(totalPop_df['Date'])
+# totalPop_df.set_index('Date', inplace=True)
+# totalPop_df = adjust_index_base_year(totalPop_df)                    # adjust index base year to 2023 = 100
 
 profit_df = pd.read_csv('raw_predictor_files/profit_corp.csv')
 profit_df.columns.values[0] = 'Date'
@@ -189,8 +189,8 @@ workingPop_df.set_index('Date', inplace=True)
 # Merge the predictor dataframes and output it as a CSV
 # predictors_df = pd.concat([autoGas_df, basicChem_df, fuelOil_df, manufacturing_df, paveRoofPC_df, PC_df, totalPop_df, profit_df, volatileEnergy_df, workingPop_df], axis=1)
 
-predictors_df = pd.concat([autoGas_df, basicChem_df, fuelOil_df, manufacturing_df, paveRoofPC_df, PC_df, totalPop_df, profit_df, workingPop_df], axis=1)
-predictor_names = ['Auto Gas', 'Basic Chemicals', 'Fuel Oil', 'Manufacturing', 'Pave Roof PC', 'Petrol Coal', 'Total Population', 'Profit', 'Working Population']
+predictors_df = pd.concat([autoGas_df, manufacturing_df, PC_df, profit_df, workingPop_df], axis=1)
+predictor_names = ['Auto Gas', 'Manufacturing', 'Petrol Coal', 'Profit', 'Working Population']
 predictors_df.columns = predictor_names
 predictors_df.to_csv('predictors.csv', index=True)
 
@@ -198,22 +198,22 @@ print(predictors_df)
 
 
 
-#################### Plot FRED data ####################
-# Plot each pollutant as a function of time
-plt.figure(figsize=(10, 6))
+# #################### Plot FRED data ####################
+# # Plot each pollutant as a function of time
+# plt.figure(figsize=(10, 6))
 
-plt.plot(profit_df.index, profit_df['Profit'], label='National Corporate Profit')
+# plt.plot(profit_df.index, profit_df['Profit'], label='National Corporate Profit')
 
-plt.xlabel('Time')
-plt.ylabel('Billions of Dollars')
-plt.title('Profit Over Time')
-plt.legend()
-plt.grid(True)
+# plt.xlabel('Time')
+# plt.ylabel('Billions of Dollars')
+# plt.title('Profit Over Time')
+# plt.legend()
+# plt.grid(True)
 
-# Set locator and formatter for the x-axis ticks
-plt.gca().xaxis.set_major_locator(mdates.YearLocator(base=5))
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+# # Set locator and formatter for the x-axis ticks
+# plt.gca().xaxis.set_major_locator(mdates.YearLocator(base=5))
+# plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
 
-plt.show()
+# plt.show()
 
 
